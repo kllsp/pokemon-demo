@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>포켓몬 캐치 스테이션 | 宝可梦捕捉站</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top, #dbeafe 0%, #e2e8f0 35%, #cbd5e1 100%);
+      color: #0f172a;
+    }
+    .page {
+      max-width: 470px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 20px 16px;
+    }
+    .phone {
+      background: linear-gradient(to bottom, #fff8e7, #ffffff, #eef6ff);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(15,23,42,0.2);
+      min-height: calc(100vh - 40px);
+    }
+    .header {
+      padding: 20px 24px;
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(255,255,255,0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    .header small {
+      display: block;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+    .back-btn {
+      border: none;
+      background: #0f172a;
+      color: white;
+      border-radius: 16px;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .content { padding: 20px 24px 28px; }
+    .hero {
+      background: linear-gradient(135deg, #fef3c7, #fffbeb, #ffedd5);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+    }
+    .pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 12px;
+    }
+    .hero h2 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+    .hero p, .desc {
+      margin: 0;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .actions, .dual-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-dark {
+      background: #0f172a;
+      color: white;
+      border-radius: 18px;
+      padding: 14px 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .btn-light {
+      background: white;
+      color: #0f172a;
+      border-radius: 18px;
+      padding: 14px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+    .section {
+      background: rgba(255,255,255,0.9);
+      margin-top: 18px;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+    }
+    .section-title {
+      margin: 0 0 12px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: white;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(15,23,42,0.06);
+    }
+    .chip.active {
+      background: #0f172a;
+      color: white;
+    }
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .card {
+      border: none;
+      width: 100%;
+      text-align: left;
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+    }
+    .card-inner {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .art {
+      width: 96px;
+      height: 96px;
+      flex: 0 0 96px;
+      background: rgba(255,255,255,0.74);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.06);
+    }
+    .art img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .meta {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.2;
+    }
+    .card p {
+      margin: 8px 0 0;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .cta {
+      margin-top: 12px;
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: #0f172a;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .center-card {
+      text-align: center;
+      border-radius: 30px;
+      padding: 24px;
+      box-shadow: 0 14px 34px rgba(15,23,42,0.1);
+    }
+    .center-art {
+      width: 210px;
+      height: 210px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.78);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      box-shadow: 0 5px 14px rgba(15,23,42,0.08);
+    }
+    .center-art img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .center-card h2 {
+      margin: 14px 0 10px;
+      font-size: 38px;
+      line-height: 1.1;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .info-box {
+      background: #f8fafc;
+      border-radius: 18px;
+      padding: 12px;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .info-box b { color: #0f172a; }
+    .detail-block {
+      background: white;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+      margin-top: 14px;
+    }
+    .detail-block p {
+      margin: 10px 0 0;
+      color: #475569;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    @media (max-width: 480px) {
+      .page { padding: 8px; }
+      .phone { min-height: calc(100vh - 16px); }
+      .content { padding: 16px; }
+      .hero h2 { font-size: 28px; }
+      .center-card h2 { font-size: 32px; }
+      .card h3 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const POKEMON = [
+      {id:25, ko:"피카츄", zh:"皮卡丘", en:"Pikachu", typeKo:"전기", typeZh:"电", genKo:"1세대", genZh:"第一世代", categoryKo:"마우스 포켓몬", categoryZh:"鼠宝可梦", height:"0.4m", weight:"6.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", bg:"linear-gradient(135deg,#fef3c7,#fde68a,#fed7aa)", descKo:"포켓몬을 대표하는 캐릭터로 높은 인지도와 친근한 이미지를 가지고 있습니다.", descZh:"作为宝可梦代表角色，拥有极高知名度和亲切形象。"},
+      {id:133, ko:"이브이", zh:"伊布", en:"Eevee", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"진화 포켓몬", categoryZh:"进化宝可梦", height:"0.3m", weight:"6.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/133.png", bg:"linear-gradient(135deg,#ffedd5,#fef3c7,#fef9c3)", descKo:"다양한 진화 가능성을 상징하는 포켓몬입니다.", descZh:"象征多种进化可能性的宝可梦。"},
+      {id:1, ko:"이상해씨", zh:"妙蛙种子", en:"Bulbasaur", typeKo:"풀", typeZh:"草", genKo:"1세대", genZh:"第一世代", categoryKo:"씨앗 포켓몬", categoryZh:"种子宝可梦", height:"0.7m", weight:"6.9kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png", bg:"linear-gradient(135deg,#ecfccb,#dcfce7,#d1fae5)", descKo:"등에 씨앗을 지닌 자연 친화적인 포켓몬입니다.", descZh:"背上带着种子，形象自然亲和。"},
+      {id:4, ko:"파이리", zh:"小火龙", en:"Charmander", typeKo:"불", typeZh:"火", genKo:"1세대", genZh:"第一世代", categoryKo:"도롱뇽 포켓몬", categoryZh:"蜥蜴宝可梦", height:"0.6m", weight:"8.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png", bg:"linear-gradient(135deg,#ffedd5,#fee2e2,#ffe4e6)", descKo:"꼬리의 불꽃이 특징인 대표 불꽃 포켓몬입니다.", descZh:"尾巴火焰是其最鲜明的特征。"},
+      {id:7, ko:"꼬부기", zh:"杰尼龟", en:"Squirtle", typeKo:"물", typeZh:"水", genKo:"1세대", genZh:"第一世代", categoryKo:"꼬마거북 포켓몬", categoryZh:"小龟宝可梦", height:"0.5m", weight:"9.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png", bg:"linear-gradient(135deg,#e0f2fe,#cffafe,#dbeafe)", descKo:"귀엽고 친숙한 이미지로 사랑받는 물 타입 포켓몬입니다.", descZh:"以可爱亲切形象深受欢迎的水属性宝可梦。"},
+      {id:39, ko:"푸린", zh:"胖丁", en:"Jigglypuff", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"풍선 포켓몬", categoryZh:"气球宝可梦", height:"0.5m", weight:"5.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/039.png", bg:"linear-gradient(135deg,#fdf2f8,#ffe4e6,#fae8ff)", descKo:"노래로 상대를 잠들게 하는 귀여운 포켓몬입니다.", descZh:"会用歌声让对手睡着的可爱宝可梦。"},
+      {id:52, ko:"나옹", zh:"喵喵", en:"Meowth", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"스크래치캣 포켓몬", categoryZh:"抓猫宝可梦", height:"0.4m", weight:"4.2kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/052.png", bg:"linear-gradient(135deg,#fef3c7,#fef9c3,#ffedd5)", descKo:"장난기 많은 고양이형 포켓몬입니다.", descZh:"顽皮又有个性的猫系宝可梦。"},
+      {id:54, ko:"고라파덕", zh:"可达鸭", en:"Psyduck", typeKo:"물", typeZh:"水", genKo:"1세대", genZh:"第一世代", categoryKo:"오리 포켓몬", categoryZh:"鸭宝可梦", height:"0.8m", weight:"19.6kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/054.png", bg:"linear-gradient(135deg,#fef9c3,#fde68a,#ecfccb)", descKo:"늘 머리를 감싸쥐고 있는 독특한 포켓몬입니다.", descZh:"总是抱着头的经典搞笑宝可梦。"},
+      {id:58, ko:"가디", zh:"卡蒂狗", en:"Growlithe", typeKo:"불", typeZh:"火", genKo:"1세대", genZh:"第一世代", categoryKo:"강아지 포켓몬", categoryZh:"小狗宝可梦", height:"0.7m", weight:"19.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/058.png", bg:"linear-gradient(135deg,#ffedd5,#fdba74,#fde68a)", descKo:"충성심이 강하고 용감한 개 포켓몬입니다.", descZh:"忠诚勇敢的小狗宝可梦。"},
+      {id:143, ko:"잠만보", zh:"卡比兽", en:"Snorlax", typeKo:"노말", typeZh:"一般", genKo:"1세대", genZh:"第一世代", categoryKo:"잠자기 포켓몬", categoryZh:"瞌睡宝可梦", height:"2.1m", weight:"460.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/143.png", bg:"linear-gradient(135deg,#f8fafc,#e0f2fe,#cbd5e1)", descKo:"먹고 자는 것을 좋아하는 거대한 포켓몬입니다.", descZh:"最喜欢吃和睡的大型宝可梦。"},
+      {id:152, ko:"치코리타", zh:"菊草叶", en:"Chikorita", typeKo:"풀", typeZh:"草", genKo:"2세대", genZh:"第二世代", categoryKo:"잎사귀 포켓몬", categoryZh:"叶子宝可梦", height:"0.9m", weight:"6.4kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/152.png", bg:"linear-gradient(135deg,#ecfccb,#d9f99d,#dcfce7)", descKo:"온화하고 상쾌한 느낌의 풀 타입 포켓몬입니다.", descZh:"给人温和清新感觉的草属性宝可梦。"},
+      {id:155, ko:"브케인", zh:"火球鼠", en:"Cyndaquil", typeKo:"불", typeZh:"火", genKo:"2세대", genZh:"第二世代", categoryKo:"불쥐 포켓몬", categoryZh:"火鼠宝可梦", height:"0.5m", weight:"7.9kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/155.png", bg:"linear-gradient(135deg,#ffedd5,#fde68a,#fee2e2)", descKo:"등에서 불꽃을 내뿜는 귀여운 불꽃 포켓몬입니다.", descZh:"背部会喷出火焰的可爱火属性宝可梦。"},
+      {id:158, ko:"리아코", zh:"小锯鳄", en:"Totodile", typeKo:"물", typeZh:"水", genKo:"2세대", genZh:"第二世代", categoryKo:"큰턱 포켓몬", categoryZh:"大颚宝可梦", height:"0.6m", weight:"9.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/158.png", bg:"linear-gradient(135deg,#cffafe,#dbeafe,#bfdbfe)", descKo:"활발하고 장난기 많은 악어형 포켓몬입니다.", descZh:"活泼好动、很有冲劲的鳄鱼宝可梦。"},
+      {id:172, ko:"피츄", zh:"皮丘", en:"Pichu", typeKo:"전기", typeZh:"电", genKo:"2세대", genZh:"第二世代", categoryKo:"아기쥐 포켓몬", categoryZh:"小鼠宝可梦", height:"0.3m", weight:"2.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/172.png", bg:"linear-gradient(135deg,#fef9c3,#fde68a,#fed7aa)", descKo:"피카츄의 진화 전 형태로 아주 귀여운 아기 포켓몬입니다.", descZh:"皮卡丘的前一阶段，十分可爱的宝宝宝可梦。"},
+      {id:196, ko:"에브이", zh:"太阳伊布", en:"Espeon", typeKo:"에스퍼", typeZh:"超能力", genKo:"2세대", genZh:"第二世代", categoryKo:"태양 포켓몬", categoryZh:"太阳宝可梦", height:"0.9m", weight:"26.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/196.png", bg:"linear-gradient(135deg,#f5d0fe,#fae8ff,#fce7f3)", descKo:"날렵하고 우아한 에스퍼 타입 포켓몬입니다.", descZh:"敏捷优雅的超能力属性宝可梦。"},
+      {id:197, ko:"블래키", zh:"月亮伊布", en:"Umbreon", typeKo:"악", typeZh:"恶", genKo:"2세대", genZh:"第二世代", categoryKo:"달빛 포켓몬", categoryZh:"月光宝可梦", height:"1.0m", weight:"27.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/197.png", bg:"linear-gradient(135deg,#f1f5f9,#cbd5e1,#e2e8f0)", descKo:"어두운 밤 분위기를 가진 인기 진화형 포켓몬입니다.", descZh:"带有夜晚氛围的人气进化型宝可梦。"},
+      {id:448, ko:"루카리오", zh:"路卡利欧", en:"Lucario", typeKo:"격투", typeZh:"格斗", genKo:"4세대", genZh:"第四世代", categoryKo:"파동 포켓몬", categoryZh:"波导宝可梦", height:"1.2m", weight:"54.0kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/448.png", bg:"linear-gradient(135deg,#dbeafe,#e0e7ff,#e2e8f0)", descKo:"강인하고 멋진 이미지로 높은 인기를 가진 포켓몬입니다.", descZh:"以帅气强大形象拥有很高人气。"},
+      {id:700, ko:"님피아", zh:"仙子伊布", en:"Sylveon", typeKo:"페어리", typeZh:"妖精", genKo:"6세대", genZh:"第六世代", categoryKo:"연결 포켓몬", categoryZh:"联结宝可梦", height:"1.0m", weight:"23.5kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/700.png", bg:"linear-gradient(135deg,#fdf2f8,#fae8ff,#fce7f3)", descKo:"부드럽고 사랑스러운 이미지의 인기 포켓몬입니다.", descZh:"拥有温柔可爱形象的人气宝可梦。"},
+      {id:906, ko:"나오하", zh:"新叶喵", en:"Sprigatito", typeKo:"풀", typeZh:"草", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"풀고양이 포켓몬", categoryZh:"草猫宝可梦", height:"0.4m", weight:"4.1kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/906.png", bg:"linear-gradient(135deg,#dcfce7,#d1fae5,#ccfbf1)", descKo:"최근 작품을 대표하는 세련된 스타팅 포켓몬입니다.", descZh:"代表新作的时尚草属性御三家。"},
+      {id:909, ko:"뜨아거", zh:"呆火鳄", en:"Fuecoco", typeKo:"불", typeZh:"火", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"불악어 포켓몬", categoryZh:"火鳄宝可梦", height:"0.4m", weight:"9.8kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/909.png", bg:"linear-gradient(135deg,#ffedd5,#fee2e2,#fce7f3)", descKo:"통통한 외형과 강한 색감이 인상적인 스타팅 포켓몬입니다.", descZh:"外形圆润、配色鲜明的新作火系御三家。"},
+      {id:912, ko:"꾸왁스", zh:"润水鸭", en:"Quaxly", typeKo:"물", typeZh:"水", genKo:"신작 스타팅", genZh:"新作御三家", categoryKo:"새끼오리 포켓몬", categoryZh:"小鸭宝可梦", height:"0.5m", weight:"6.1kg", image:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/912.png", bg:"linear-gradient(135deg,#e0f2fe,#dbeafe,#cffafe)", descKo:"깔끔하고 단정한 이미지가 특징인 물 타입 스타팅입니다.", descZh:"以干净利落形象著称的水系御三家。"}
+    ];
+
+    const TYPE_META = {
+      "전체":"전체 포켓몬 보기 / 查看全部宝可梦",
+      "전기":"전기 타입 포켓몬 / 电属性宝可梦",
+      "노말":"노말 타입 포켓몬 / 一般属性宝可梦",
+      "풀":"풀 타입 포켓몬 / 草属性宝可梦",
+      "불":"불 타입 포켓몬 / 火属性宝可梦",
+      "물":"물 타입 포켓몬 / 水属性宝可梦",
+      "에스퍼":"에스퍼 타입 포켓몬 / 超能力属性宝可梦",
+      "악":"악 타입 포켓몬 / 恶属性宝可梦",
+      "격투":"격투 타입 포켓몬 / 格斗属性宝可梦",
+      "페어리":"페어리 타입 포켓몬 / 妖精属性宝可梦"
+    };
+
+    let screen = "home";
+    let selectedType = "전체";
+    let selected = null;
+
+    function filteredList() {
+      return selectedType === "전체" ? POKEMON : POKEMON.filter(p => p.typeKo === selectedType);
+    }
+
+    function renderHome() {
+      const types = ["전체", ...Array.from(new Set(POKEMON.map(p => p.typeKo)))];
+      return `
+        <div class="content">
+          <div class="hero">
+            <div class="pill">포켓몬 원본 아트워크 기반 데모 / 官方原版图鉴演示</div>
+            <h2>친숙한 포켓몬을 탐색하고<br>宝可梦探索与信息查看</h2>
+            <p>타입을 선택한 뒤 랜덤 추천을 받을 수 있고, 포켓몬의 기본 설정과 세대 정보, 특징을 확인할 수 있습니다.<br>选择属性后可以随机推荐宝可梦，并查看基础设定、世代信息和角色特点。</p>
+            <div class="actions">
+              <button class="btn-dark" onclick="pickRandom()">✨ 랜덤 추천 / 随机推荐</button>
+              <button class="btn-light" onclick="openFirst()">★ 바로 보기 / 直接查看</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Type Filter / 属性筛选</div>
+            <div class="chips">
+              ${types.map(type => `<button class="chip ${selectedType===type?'active':''}" onclick="setType('${type}')">${type}</button>`).join('')}
+            </div>
+            <p class="desc" style="margin-top:12px;">${TYPE_META[selectedType] || ''}</p>
+          </div>
+
+          <div class="list">
+            ${filteredList().map(p => `
+              <button class="card" style="background:${p.bg};" onclick="openDetail(${p.id})">
+                <div class="card-inner">
+                  <div class="art"><img src="${p.image}" alt="${p.ko}"></div>
+                  <div style="flex:1; min-width:0;">
+                    <div class="meta">${p.typeKo} 타입 · ${p.genKo}</div>
+                    <h3>${p.ko} / ${p.zh}</h3>
+                    <p>${p.descKo}<br>${p.descZh}</p>
+                  </div>
+                </div>
+                <div class="cta">상세 정보 보기 / 查看详情</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRandom() {
+      return `
+        <div class="content" style="display:flex; flex-direction:column; justify-content:center; min-height:calc(100vh - 110px);">
+          <div class="center-card" style="background:${selected.bg};">
+            <div class="center-art"><img src="${selected.image}" alt="${selected.ko}"></div>
+            <div class="pill" style="margin-top:16px;">Random Pick</div>
+            <h2>${selected.ko} / ${selected.zh}</h2>
+            <div class="meta">${selected.typeKo} 타입 · ${selected.genKo}</div>
+            <p class="desc" style="margin-top:12px;">${selected.descKo}<br>${selected.descZh}</p>
+          </div>
+          <div class="dual-actions">
+            <button class="btn-light" onclick="pickRandom()">↻ 다시 뽑기 / 重新抽取</button>
+            <button class="btn-dark" onclick="screen='detail'; render()">ⓘ 상세 정보 / 详细信息</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDetail() {
+      return `
+        <div class="content">
+          <div class="center-card" style="background:${selected.bg}; text-align:left;">
+            <div style="display:flex; gap:16px; align-items:center;">
+              <div class="art" style="width:112px; height:112px; flex:0 0 112px;"><img src="${selected.image}" alt="${selected.ko}"></div>
+              <div style="flex:1;">
+                <div class="pill">도감 정보 / 图鉴信息</div>
+                <h2 style="font-size:34px; margin:0 0 4px;">${selected.ko} / ${selected.zh}</h2>
+                <div style="color:#475569; font-weight:700;">${selected.en}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-block">
+            <div class="section-title">Basic Info / 基本信息</div>
+            <div class="info-grid">
+              <div class="info-box"><b>타입 / 属性</b><br>${selected.typeKo} / ${selected.typeZh}</div>
+              <div class="info-box"><b>세대 / 世代</b><br>${selected.genKo} / ${selected.genZh}</div>
+              <div class="info-box"><b>분류 / 分类</b><br>${selected.categoryKo} / ${selected.categoryZh}</div>
+              <div class="info-box"><b>신장·체중 / 身高·体重</b><br>${selected.height} / ${selected.weight}</div>
+            </div>
+          </div>
+
+          <div class="detail-block">
+            <div class="section-title">Description / 角色说明</div>
+            <p>${selected.descKo}<br>${selected.descZh}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      document.getElementById('app').innerHTML = `
+        <div class="page">
+          <div class="phone">
+            <div class="header">
+              <div>
+                <small>Information Kiosk Demo</small>
+                <h1>포켓몬 캐치 스테이션 / 宝可梦捕捉站</h1>
+              </div>
+              ${screen !== 'home' ? '<button class="back-btn" onclick="goHome()">←</button>' : ''}
+            </div>
+            ${screen === 'home' ? renderHome() : screen === 'random' ? renderRandom() : renderDetail()}
+          </div>
+        </div>
+      `;
+    }
+
+    function setType(type) { selectedType = type; render(); }
+    function pickRandom() {
+      const list = filteredList();
+      selected = list[Math.floor(Math.random() * list.length)];
+      screen = "random";
+      render();
+    }
+    function openDetail(id) {
+      selected = POKEMON.find(p => p.id === id);
+      screen = "detail";
+      render();
+    }
+    function openFirst() {
+      const list = filteredList();
+      selected = list[0];
+      screen = "detail";
+      render();
+    }
+    function goHome() { screen = "home"; render(); }
+
+    render();
+  </script>
+</body>
+</html>
