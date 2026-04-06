@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>포켓몬 키오스크</title>
+<style>
+body {
+  font-family: sans-serif;
+  background: linear-gradient(135deg,#fef3c7,#e0f2fe);
+  text-align: center;
+  padding: 40px;
+}
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 300px;
+  margin: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+img { width:200px; }
+button {
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  background:black;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>포켓몬 추천 키오스크</h1>
+
+<div class="card">
+  <img id="img" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png">
+  <h2 id="name">피카츄</h2>
+  <p id="type">전기 타입</p>
+</div>
+
+<button onclick="randomPokemon()">랜덤 추천</button>
+
+<script>
+const list = [
+  {
+    name:"피카츄",
+    type:"전기 타입",
+    img:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png"
+  },
+  {
+    name:"이브이",
+    type:"노말 타입",
+    img:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/133.png"
+  },
+  {
+    name:"파이리",
+    type:"불 타입",
+    img:"https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png"
+  }
+];
+
+function randomPokemon(){
+  const p = list[Math.floor(Math.random()*list.length)];
+  document.getElementById("img").src = p.img;
+  document.getElementById("name").innerText = p.name;
+  document.getElementById("type").innerText = p.type;
+}
+</script>
+
+</body>
+</html>
