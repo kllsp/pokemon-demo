@@ -1,0 +1,25 @@
+{
+  "name": "포켓몬 인터랙티브 키오스크",
+  "short_name": "Pokemon Kiosk",
+  "description": "1080px fixed-width interactive kiosk PWA",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8d8",
+  "theme_color": "#f9cf34",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
